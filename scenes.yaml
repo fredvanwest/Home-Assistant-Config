@@ -1,0 +1,590 @@
+- id: '1658407302160'
+  name: master_bathroom_off
+  entities:
+    light.smart_things_e:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things E
+      supported_features: 33
+      state: 'off'
+    light.smart_things_f:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things F
+      supported_features: 33
+      state: 'off'
+    light.smart_things_g:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things G
+      supported_features: 33
+      state: 'off'
+    light.smart_things_h:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things H
+      supported_features: 33
+      state: 'off'
+    light.smart_things_k:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things K
+      supported_features: 33
+      state: 'off'
+    light.smart_things_l:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things L
+      supported_features: 33
+      state: 'off'
+    light.smart_home_o_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home O
+      supported_features: 0
+      state: 'off'
+  metadata:
+    light.smart_things_e:
+      entity_only: true
+    light.smart_things_f:
+      entity_only: true
+    light.smart_things_g:
+      entity_only: true
+    light.smart_things_h:
+      entity_only: true
+    light.smart_things_k:
+      entity_only: true
+    light.smart_things_l:
+      entity_only: true
+    light.smart_home_o_2:
+      entity_only: true
+- id: '1658407365598'
+  name: master_bathroom_minimum
+  entities:
+    light.smart_things_e:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things E
+      supported_features: 33
+      state: 'off'
+    light.smart_things_f:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things F
+      supported_features: 33
+      state: 'off'
+    light.smart_things_g:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things G
+      supported_features: 33
+      state: 'off'
+    light.smart_things_h:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things H
+      supported_features: 33
+      state: 'off'
+    light.smart_things_k:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things K
+      supported_features: 33
+      state: 'off'
+    light.smart_things_l:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things L
+      supported_features: 33
+      state: 'off'
+    light.smart_home_o_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 13
+      hs_color:
+      - 239.666
+      - 100
+      rgb_color:
+      - 0
+      - 1
+      - 255
+      xy_color:
+      - 0.136
+      - 0.04
+      friendly_name: Smart Home O
+      supported_features: 0
+      state: 'on'
+  metadata:
+    light.smart_things_e:
+      entity_only: true
+    light.smart_things_f:
+      entity_only: true
+    light.smart_things_g:
+      entity_only: true
+    light.smart_things_h:
+      entity_only: true
+    light.smart_things_k:
+      entity_only: true
+    light.smart_things_l:
+      entity_only: true
+    light.smart_home_o_2:
+      entity_only: true
+- id: '1658407981251'
+  name: master_closet_off
+  entities:
+    light.smart_things_a:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things A
+      supported_features: 33
+      state: 'off'
+    light.smart_things_b:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things B
+      supported_features: 33
+      state: 'off'
+    light.smart_things_c:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things C
+      supported_features: 33
+      state: 'off'
+    light.smart_things_d:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things D
+      supported_features: 33
+      state: 'off'
+  metadata:
+    light.smart_things_a:
+      entity_only: true
+    light.smart_things_b:
+      entity_only: true
+    light.smart_things_c:
+      entity_only: true
+    light.smart_things_d:
+      entity_only: true
+- id: '1658426941757'
+  name: master_bathroom_bright
+  entities:
+    light.smart_things_e:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things E
+      supported_features: 33
+      state: 'on'
+    light.smart_things_f:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things F
+      supported_features: 33
+      state: 'on'
+    light.smart_things_g:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things G
+      supported_features: 33
+      state: 'on'
+    light.smart_things_h:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things H
+      supported_features: 33
+      state: 'on'
+    light.smart_things_k:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things K
+      supported_features: 33
+      state: 'on'
+    light.smart_things_l:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Smart Things L
+      supported_features: 33
+      state: 'on'
+    light.smart_home_o_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 252
+      hs_color:
+      - 329.916
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      friendly_name: Smart Home O
+      supported_features: 0
+      state: 'on'
+  metadata:
+    light.smart_things_e:
+      entity_only: true
+    light.smart_things_f:
+      entity_only: true
+    light.smart_things_g:
+      entity_only: true
+    light.smart_things_h:
+      entity_only: true
+    light.smart_things_k:
+      entity_only: true
+    light.smart_things_l:
+      entity_only: true
+    light.smart_home_o_2:
+      entity_only: true
+- id: '1658434416376'
+  name: master_closet_on
+  entities:
+    light.smart_things_a:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things A
+      supported_features: 33
+      color_mode: brightness
+      brightness: 255
+      state: 'on'
+    light.smart_things_b:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things B
+      supported_features: 33
+      color_mode: brightness
+      brightness: 255
+      state: 'on'
+    light.smart_things_c:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things C
+      supported_features: 33
+      color_mode: brightness
+      brightness: 255
+      state: 'on'
+    light.smart_things_d:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things D
+      supported_features: 33
+      color_mode: brightness
+      brightness: 255
+      state: 'on'
+  metadata:
+    light.smart_things_a:
+      entity_only: true
+    light.smart_things_b:
+      entity_only: true
+    light.smart_things_c:
+      entity_only: true
+    light.smart_things_d:
+      entity_only: true
+- id: '1658434491653'
+  name: master_closet_minimum
+  entities:
+    light.smart_things_a:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things A
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+    light.smart_things_b:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things B
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+    light.smart_things_c:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things C
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+    light.smart_things_d:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things D
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+  metadata:
+    light.smart_things_a:
+      entity_only: true
+    light.smart_things_b:
+      entity_only: true
+    light.smart_things_c:
+      entity_only: true
+    light.smart_things_d:
+      entity_only: true
+- id: '1658439469839'
+  name: master_bathroom_nightlight
+  entities:
+    light.smart_things_e:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things E
+      supported_features: 33
+      state: 'off'
+    light.smart_things_f:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things F
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+    light.smart_things_g:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things G
+      supported_features: 33
+      state: 'off'
+    light.smart_things_h:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things H
+      supported_features: 33
+      state: 'off'
+    light.smart_things_k:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things K
+      supported_features: 33
+      color_mode: brightness
+      brightness: 13
+      state: 'on'
+    light.smart_things_l:
+      supported_color_modes:
+      - brightness
+      friendly_name: Smart Things L
+      supported_features: 33
+      state: 'off'
+    light.smart_home_o_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 13
+      hs_color:
+      - 239.666
+      - 100
+      rgb_color:
+      - 0
+      - 1
+      - 255
+      xy_color:
+      - 0.136
+      - 0.04
+      friendly_name: Smart Home O
+      supported_features: 0
+      state: 'on'
+  metadata:
+    light.smart_things_e:
+      entity_only: true
+    light.smart_things_f:
+      entity_only: true
+    light.smart_things_g:
+      entity_only: true
+    light.smart_things_h:
+      entity_only: true
+    light.smart_things_k:
+      entity_only: true
+    light.smart_things_l:
+      entity_only: true
+    light.smart_home_o_2:
+      entity_only: true
+- id: '1659304039864'
+  name: bathroom_standby
+  entities:
+    light.smart_home_o_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home O
+      supported_features: 0
+      color_mode: hs
+      brightness: 13
+      hs_color:
+      - 105.292
+      - 100
+      rgb_color:
+      - 62
+      - 255
+      - 0
+      xy_color:
+      - 0.198
+      - 0.725
+      state: 'on'
+  metadata: {}
+- id: '1660950829161'
+  name: Carriage_night
+  entities:
+    light.smart_home_n_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home N
+      supported_features: 0
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 254.708
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      state: 'on'
+    light.smart_home_m:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home M
+      supported_features: 0
+      state: unavailable
+  metadata: {}
+- id: '1660950932039'
+  name: Carriage_weekend
+  entities:
+    light.smart_home_n_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home N
+      supported_features: 0
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 45.125
+      - 100
+      rgb_color:
+      - 255
+      - 191
+      - 0
+      xy_color:
+      - 0.527
+      - 0.447
+      state: 'on'
+    light.smart_home_m:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home M
+      supported_features: 0
+      state: unavailable
+  metadata: {}
+- id: '1660950974002'
+  name: Carriage_holiday
+  entities:
+    light.smart_home_n_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home N
+      supported_features: 0
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 239.666
+      - 85.827
+      rgb_color:
+      - 36
+      - 37
+      - 255
+      xy_color:
+      - 0.144
+      - 0.053
+      state: 'on'
+    light.smart_home_m:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home M
+      supported_features: 0
+      state: unavailable
+  metadata: {}
+- id: '1660951007095'
+  name: Carriage_off
+  entities:
+    light.smart_home_n_2:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home N
+      supported_features: 0
+      state: 'off'
+    light.smart_home_m:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Smart Home M
+      supported_features: 0
+      state: unavailable
+  metadata: {}

@@ -1,0 +1,12 @@
+  light.smart_home_n:
+    supported_features: 63
+  light.smart_home_m:
+    supported_features: 63
+  light.smart_home_o:
+    supported_features: 63
+  light.smart_home_q:
+    supported_features: 63
+  light.smart_home_s:
+    supported_features: 63
+  light.smart_home_t:
+    supported_features: 63

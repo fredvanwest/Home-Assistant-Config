@@ -1,0 +1,13 @@
+# This template sensor represents the most recently used Alexa. The list will need to be updated if we add more.
+  - platform: template
+    sensors:
+      last_alexa:
+        entity_id:
+          - media_player.vw_guestroom
+          - media_player.vw_familyroom
+          - media_player.vw_kitchen
+          - media_player.vw_nico
+          - media_player.vw_master
+          - media_player.vw_den
+        value_template: >
+          {{ states.media_player | selectattr('attributes.last_called', 'eq', True) | map(attribute='entity_id') | first }}

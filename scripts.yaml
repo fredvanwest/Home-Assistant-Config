@@ -1,0 +1,248 @@
+activate_alexa_actionable_notification:
+  description: Activates an actionable notification on a specific echo device
+  fields:
+    text:
+      description: The text you would like alexa to speak.
+      example: What would you like the thermostat set to?
+    event_id:
+      description: Correlation ID for event responses
+      example: ask_for_temperature
+    alexa_device:
+      description: Alexa device you want to trigger
+      example: media_player.bedroom_echo
+  sequence:
+  - service: input_text.set_value
+    data:
+      entity_id: input_text.alexa_actionable_notification
+      value: '{"text": "{{ text }}", "event": "{{ event_id }}"}'
+  - service: media_player.play_media
+    data:
+      entity_id: '{{ alexa_device }}'
+      media_content_type: skill
+      media_content_id: amzn1.ask.skill.ee40abd9-1e42-4824-8745-6f4951023294
+script_bathroom_minimum:
+  alias: Script Bathroom Minimum
+  sequence:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.bathroom_minimum
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.bathroom_timer
+  mode: single
+report_fred_work_status:
+  alias: Script Fred Work Status
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_demo
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: Fred is in a demo.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_office
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: Fred is at JPMC.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_rota
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: Fred is on ROTA.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_vacation
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: Fred is on vacation today.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.jpmc_holiday
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media
+        data:
+          data:
+            type: tts
+          message: Today is a JPMC Holiday.
+          target: '{{ states(''sensor.last_alexa'') }}'
+    - conditions:
+      - condition: time
+        before: '11:00:00'
+        after: '10:30:00'
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: Fred may be in his daily standup.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+    default:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: binary_sensor.vw_luxo_audio_input_in_use
+          state: 'on'
+        sequence:
+        - service: notify.alexa_media
+          data:
+            message: Fred is on a zoom call.
+            target: '{{ states(''sensor.last_alexa'') }}'
+            data:
+              type: tts
+      default:
+      - service: notify.alexa_media
+        data:
+          message: Fred is available.
+          target: '{{ states(''sensor.last_alexa'') }}'
+          data:
+            type: tts
+  mode: single
+script_fred_work_status_backup:
+  alias: Script Fred Work Status Backup
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_demo
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred is in a demo
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_office
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred is in office.
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_rota
+        state: 'off'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred is on ROTA.
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.fred_vacation
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred is on vacation today.
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: calendar.jpmc_holiday
+        state: 'on'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          data:
+            type: tts
+          message: Fred is on holiday today.
+    - conditions:
+      - condition: time
+        before: '11:00:00'
+        after: '10:30:00'
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred may be in his daily standup
+          data:
+            type: tts
+    default:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: binary_sensor.vw_luxo_audio_input_in_use
+          state: 'on'
+        sequence:
+        - service: notify.alexa_media_vw_familyroom
+          data:
+            message: Fred's Zoom is in use.
+            data:
+              type: tts
+      default:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Fred is available.
+          data:
+            type: tts
+  mode: single
+script_suspend_door_alert:
+  alias: script_suspend_door_alert
+  sequence:
+  - service: automation.turn_off
+    data: {}
+    target:
+      entity_id: automation.smart_door
+  - service: notify.alexa_media
+    data:
+      message: Turning off door alerts.
+      target: '{{ states(''sensor.last_alexa'') }}'
+      data:
+        type: tts
+  mode: single
+script_resume_door_alert:
+  alias: script_resume_door_alert
+  sequence:
+  - service: automation.turn_on
+    data: {}
+    target:
+      entity_id: automation.smart_door
+  - service: notify.alexa_media
+    data:
+      message: Turning on door alerts.
+      target: '{{ states(''sensor.last_alexa'') }}'
+      data:
+        type: tts
+  mode: single

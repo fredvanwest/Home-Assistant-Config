@@ -1,0 +1,796 @@
+- id: '1658439277930'
+  alias: Bathroom On
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.master_bathroom_bright
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.bathroom_timer
+  mode: single
+- id: '1658439299787'
+  alias: Bathroom Off
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.bathroom_off
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.bathroom_timer
+  mode: single
+- id: '1658439335962'
+  alias: Bathroom Minimum
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.bathroom_minimum
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.bathroom_timer
+  mode: single
+- id: '1658439354091'
+  alias: Bathroom Nightlight
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.master_bathroom_nightlight
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.bathroom_timer
+  mode: single
+- id: '1658450499589'
+  alias: Carriage lights off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '10'
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.carriage_off
+  mode: single
+- id: '1658450703865'
+  alias: Carriage Lights on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: '-10'
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.carriage_night
+  mode: single
+- id: '1658501589719'
+  alias: Nightly Mail Cleanup
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:55:00'
+  condition: []
+  action:
+  - service: rest_command.delete_mail
+    data: {}
+  mode: single
+- id: '1658502219720'
+  alias: Daily Mail Check
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.mail_usps_mail
+        above: '0'
+      sequence:
+      - service: rest_command.forward_mail
+        data: {}
+    default: []
+  mode: single
+- id: '1658748482296'
+  alias: Door Alert
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 4ca8fa1828cf372d526af3ab234dd315
+    entity_id: binary_sensor.front_door_contact
+    domain: binary_sensor
+    id: front_door_opened
+  - type: opened
+    platform: device
+    device_id: 8d9843bdfe600a4ddc0d0ff86bc3c805
+    entity_id: binary_sensor.sliding_door_contact
+    domain: binary_sensor
+    id: sliding_door_opened
+  - type: opened
+    platform: device
+    device_id: dee2ed43aaa0932234a40ee1400df59f
+    entity_id: binary_sensor.garage_door_contact
+    domain: binary_sensor
+    id: garage_door_opened
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_type: sound
+      media_content_id: bell_02
+    target:
+      entity_id: media_player.vw_familyroom
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: sliding_door_opened
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: "{{ [\"Precious pupper!\",\n  \"Wonderful woofer!\",\n  \"Good
+            dog!\"] | random }}\n"
+          data:
+            type: tts
+    - conditions:
+      - condition: trigger
+        id: garage_door_opened
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: input_boolean.fred_arriving
+          state: 'on'
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Dads home. King of the castle. Lord of the manor.
+          data:
+            type: tts
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.fred_arriving
+    - conditions:
+      - condition: trigger
+        id: front_door_opened
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: input_boolean.replay_daily_briefing
+          state: 'on'
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          data:
+            type: tts
+          message: Replaying daily briefing
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.replay_daily_briefing
+    default: []
+  mode: single
+- id: '1658846801023'
+  alias: Turn on Demo
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: -0:10:0
+    entity_id: calendar.fred_demo
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.fred_in_a_meeting
+  - service: notify.alexa_media_vw_guestroom
+    data:
+      message: Your meeting is about to start
+      data:
+        type: tts
+  mode: single
+- id: '1658846910838'
+  alias: Turn off Demo
+  description: ''
+  trigger:
+  - platform: calendar
+    event: end
+    offset: 0:10:0
+    entity_id: calendar.fred_demo
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.fred_in_a_meeting
+  mode: single
+- id: '1658850437024'
+  alias: Turn on In Office
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: -0:0:0
+    entity_id: calendar.fred_office
+  condition:
+  - condition: state
+    entity_id: input_boolean.fred_in_office
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.fred_in_office
+  mode: single
+- id: '1658850573720'
+  alias: Turn off In Office
+  description: ''
+  trigger:
+  - platform: calendar
+    event: end
+    offset: 0:0:0
+    entity_id: calendar.fred_office
+  condition:
+  - condition: state
+    entity_id: input_boolean.fred_in_office
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.fred_in_office
+  mode: single
+- id: '1658850648952'
+  alias: Turn on ROTA
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: -0:0:0
+    entity_id: calendar.fred_rota
+  condition:
+  - condition: state
+    entity_id: input_boolean.fred_on_rota
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.fred_on_rota
+  mode: single
+- id: '1658850716656'
+  alias: Turn off ROTA
+  description: ''
+  trigger:
+  - platform: calendar
+    event: end
+    offset: -0:0:0
+    entity_id: calendar.fred_rota
+  condition:
+  - condition: state
+    entity_id: calendar.fred_rota
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.fred_on_rota
+  mode: single
+- id: '1658858691976'
+  alias: Bathroom Motion
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: eb8dab9b1a8b45c5b257e12366535fec
+    entity_id: binary_sensor.hue_motion_sensor_motion
+    domain: binary_sensor
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 0aebb0eae3e0d6fbb1cdb4a30d02918d
+    entity_id: light.smart_home_o_2
+    domain: light
+  action:
+  - choose:
+    - conditions:
+      - condition: sun
+        after: sunset
+        after_offset: '-10'
+      - condition: or
+        conditions:
+        - condition: time
+          before: '23:59:59'
+          after: '17:00:00'
+          weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+      sequence:
+      - service: scene.turn_on
+        data: {}
+        target:
+          entity_id: scene.master_bathroom_nightlight
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.bathroom_timer
+    - conditions:
+      - condition: sun
+        before: sunrise
+        before_offset: '10'
+      - condition: or
+        conditions:
+        - condition: time
+          before: 08:00:00
+          weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+          after: 00:00:00
+      sequence:
+      - service: scene.turn_on
+        data: {}
+        target:
+          entity_id: scene.bathroom_minimum
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.bathroom_timer
+    default:
+    - service: scene.turn_on
+      data: {}
+      target:
+        entity_id:
+        - scene.bathroom_off
+    - service: timer.start
+      data: {}
+      target:
+        entity_id: timer.bathroom_timer
+  mode: single
+- id: '1658858969993'
+  alias: Bathroom Timer Elapsed
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.bathroom_timer
+  condition: []
+  action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.bathroom_off
+  mode: single
+- id: '1659226911033'
+  alias: Set Trash Day
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 00:00:00
+        weekday:
+        - tue
+        after: 00:00:00
+      sequence:
+      - service: input_select.set_options
+        data:
+          options: both
+        target:
+          entity_id: input_select.trash_day
+    - conditions:
+      - condition: time
+        before: 00:00:00
+        weekday:
+        - fri
+        after: 00:00:00
+      sequence:
+      - service: input_select.set_options
+        data:
+          options: trash
+        target:
+          entity_id: input_select.trash_day
+    default:
+    - service: input_select.set_options
+      data:
+        options: none
+      target:
+        entity_id: input_select.trash_day
+  mode: single
+- id: '1659227281555'
+  alias: Daily Reset
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 00:00:00
+        weekday:
+        - sun
+        after: 00:00:00
+      sequence:
+      - service: input_select.set_options
+        data:
+          options: sunday
+        target:
+          entity_id: input_select.mail_status
+    - conditions:
+      - condition: state
+        entity_id: calendar.holidays_in_united_states
+        state: 'on'
+      sequence:
+      - service: input_select.set_options
+        data:
+          options: holiday
+        target:
+          entity_id: input_select.mail_status
+    default:
+    - service: input_select.set_options
+      data:
+        options: none
+      target:
+        entity_id: input_select.mail_status
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.fred_arriving
+      - input_boolean.replay_daily_briefing
+  mode: single
+- id: '1659230535897'
+  alias: YGM
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.mail_usps_mail
+    above: '0'
+  condition:
+  - condition: state
+    entity_id: input_select.mail_status
+    state: none
+  action:
+  - service: input_select.set_options
+    data:
+      options: ygm
+    target:
+      entity_id: input_select.mail_status
+  - service: notify.mobile_app_heisenberg
+    data:
+      message: Mail arriving today
+      title: USPS
+      data:
+        entity_id: camera.mail_usps_camera
+  mode: single
+- id: '1659300783630'
+  alias: Set Fred Arriving
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.heisenberg_2
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.fred_arriving
+  mode: single
+- id: '1659301860640'
+  alias: Announce Mail Status
+  description: ''
+  trigger:
+  - platform: time
+    at: '13:00:00'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.mail_status
+        state: sunday
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/no-post-on-sundays.mp3"/>
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: No post on sunday
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.mail_status
+        state: holiday
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/hp-christmas2.mp3"/>
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: Today is a holiday
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.mail_status
+        state: ygm
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/ah-mails-here.mp3"/>
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: "{%- if((states(\"sensor.mail_usps_mail\") | int) == 1) -%}\n  One
+            piece of mail\n{%- else -%}\n  {{ states(\"sensor.mail_usps_mail\") |
+            int }} pieces of mail\n{%- endif %} will be delivered.\n"
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+    default:
+    - service: notify.alexa_media
+      data:
+        message: <audio src="https://mc-usa.duckdns.org/local/alexa/no-such-thing-as-magic.mp3"/>
+        target: '{{ states("input_text.announce_media") }}'
+        data:
+          type: tts
+    - service: notify.alexa_media
+      data:
+        message: No mail today.
+        target: '{{ states("input_text.announce_media") }}'
+        data:
+          type: tts
+    - service: notify.mobile_app_heisenberg
+      data:
+        message: No mail arriving today
+        title: USPS
+        data:
+          entity_id: camera.mail_usps_camera
+  mode: single
+- id: '1659305364683'
+  alias: popup test
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: notify.android_tv_fire_tv
+    data:
+      message: Hello Youtube
+      title: Cool Title
+      data:
+        duration: 3
+        fontsize: small
+        position: lower right
+        color: blue
+        image:
+          path: /config/www/images/leia.png
+  mode: single
+- id: '1659452421171'
+  alias: Daily Standup
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:30:00'
+    id: standup_on
+  - platform: time
+    at: '11:05:00'
+    id: standup_off
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: standup_on
+      sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id: input_boolean.fred_in_a_meeting
+    - conditions:
+      - condition: trigger
+        id: standup_off
+      sequence:
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.fred_in_a_meeting
+    default: []
+  mode: single
+- id: '1660835408789'
+  alias: Smart Door
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door_contact
+    - binary_sensor.sliding_door_contact
+    - binary_sensor.garage_door_contact
+    from: 'off'
+    to: 'on'
+    id: chime
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door_contact
+    - binary_sensor.sliding_door_contact
+    - binary_sensor.garage_door_contact
+    from: 'off'
+    to: 'on'
+    id: door_still_open
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: chime
+      sequence:
+      - service: media_player.play_media
+        data:
+          media_content_type: sound
+          media_content_id: bell_02
+        target:
+          entity_id: '{{ states("input_text.announce_media") }}'
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: binary_sensor.front_door_contact
+            state: 'on'
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: input_boolean.replay_daily_briefing
+              state: 'on'
+          sequence:
+          - service: notify.alexa_media
+            data:
+              message: Replaying daily briefing
+              target: '{{ states("input_text.announce_media") }}'
+              data:
+                type: tts
+          - delay:
+              hours: 0
+              minutes: 1
+              seconds: 0
+              milliseconds: 0
+          - service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id: input_boolean.replay_daily_briefing
+        - conditions:
+          - condition: state
+            entity_id: binary_sensor.sliding_door_contact
+            state: 'on'
+          sequence:
+          - service: notify.alexa_media
+            data:
+              message: "{{ [\"Precious pupper!\",\n    \"Wonderful woofer!\",\n    \"Somebody
+                deserves a treat!\",\n    \"Sit ooboo Sit! Good Dog!\",\n    \"Grrrr.
+                Bark. Woof. Good dog!\"] | random }}\n"
+              target: '{{ states("input_text.announce_media") }}'
+              data:
+                type: tts
+        - conditions:
+          - condition: state
+            entity_id: binary_sensor.garage_door_contact
+            state: 'on'
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: input_boolean.fred_arriving
+              state: 'on'
+          sequence:
+          - delay:
+              hours: 0
+              minutes: 1
+              seconds: 0
+              milliseconds: 0
+          - service: notify.alexa_media
+            data:
+              message: Dads home. King of the castle. Lord of the manor
+              target: '{{ states("input_text.announce_media") }}'
+              data:
+                type: tts
+          - service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id: input_boolean.fred_arriving
+        default: []
+    - conditions:
+      - condition: trigger
+        id: door_still_open
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: "The {{ trigger.to_state.attributes.friendly_name | replace(\"
+            contact\",\"\") }} {{ [\n  ' is standing open.',\n  ' is open.',\n  '
+            does not close on its own.',\n  ' was left standing open.'\n ] | random
+            }}\n {{ [\n  'Can a human be so kind and close it?',\n  'The air quality
+            in this house has actually improved.',\n  'Closing the door would improve
+            the internal climate of the house.',\n  'Hey. The door was just opened
+            and this is crazy. But now you know. So close it maybe.',\n  'The frog
+            found out the door is opened and wants back in.',\n  'If at first you
+            do not succeed in closing the door, please try again. Like, Right now
+            seems like a good time to try again.',\n  'And the automatic door closer
+            appears to be broken. So, you know what to do. Time to get physical.',\n
+            \ 'I would close it for you. But I lack legs. And Arms.'\n  'Remember
+            when you said you hate bugs. Well now is your chance to help.'\n ] | random
+            }}\n"
+          target: '{{ states("input_text.announce_media") }}'
+          data:
+            type: tts
+    default: []
+  mode: single
