@@ -1,0 +1,5 @@
+- sensor:
+    - name: last_alexa
+      state: "{{ states.media_player | selectattr('attributes.last_called', 'eq', True) | map(attribute='entity_id') | first }}"
+    - name: points_leader
+      state: '{% set house_standings = [{"name":"slytherin", "pts": states("counter.slytherin_points") | int},{"name":"gryffindor", "pts":states("counter.gryffindor_points")|int},{"name":"hufflepuff","pts":states("counter.hufflepuff_points")|int},{"name":"ravenclaw","pts":states("counter.ravenclaw_points")|int}] %} {% set current_winner = house_standings | sort(attribute="pts") | reverse | first %} {{ current_winner.name }}'

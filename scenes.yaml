@@ -490,7 +490,19 @@
       - hs
       friendly_name: Smart Home M
       supported_features: 0
-      state: unavailable
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 105.292
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      state: 'on'
   metadata: {}
 - id: '1660950932039'
   name: Carriage_weekend
@@ -526,7 +538,19 @@
       - hs
       friendly_name: Smart Home M
       supported_features: 0
-      state: unavailable
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 45.125
+      - 100
+      rgb_color:
+      - 255
+      - 191
+      - 0
+      xy_color:
+      - 0.527
+      - 0.447
+      state: 'on'
   metadata: {}
 - id: '1660950974002'
   name: Carriage_holiday
@@ -544,14 +568,14 @@
       brightness: 255
       hs_color:
       - 239.666
-      - 85.827
+      - 100
       rgb_color:
-      - 36
-      - 37
+      - 0
+      - 1
       - 255
       xy_color:
-      - 0.144
-      - 0.053
+      - 0.136
+      - 0.04
       state: 'on'
     light.smart_home_m:
       min_mireds: 153
@@ -562,7 +586,19 @@
       - hs
       friendly_name: Smart Home M
       supported_features: 0
-      state: unavailable
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 239.666
+      - 100
+      rgb_color:
+      - 0
+      - 1
+      - 255
+      xy_color:
+      - 0.136
+      - 0.04
+      state: 'on'
   metadata: {}
 - id: '1660951007095'
   name: Carriage_off
@@ -586,5 +622,5 @@
       - hs
       friendly_name: Smart Home M
       supported_features: 0
-      state: unavailable
+      state: 'off'
   metadata: {}

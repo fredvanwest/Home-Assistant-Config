@@ -204,116 +204,6 @@
           entity_id: input_boolean.replay_daily_briefing
     default: []
   mode: single
-- id: '1658846801023'
-  alias: Turn on Demo
-  description: ''
-  trigger:
-  - platform: calendar
-    event: start
-    offset: -0:10:0
-    entity_id: calendar.fred_demo
-  condition: []
-  action:
-  - service: input_boolean.turn_on
-    data: {}
-    target:
-      entity_id: input_boolean.fred_in_a_meeting
-  - service: notify.alexa_media_vw_guestroom
-    data:
-      message: Your meeting is about to start
-      data:
-        type: tts
-  mode: single
-- id: '1658846910838'
-  alias: Turn off Demo
-  description: ''
-  trigger:
-  - platform: calendar
-    event: end
-    offset: 0:10:0
-    entity_id: calendar.fred_demo
-  condition: []
-  action:
-  - service: input_boolean.turn_off
-    data: {}
-    target:
-      entity_id: input_boolean.fred_in_a_meeting
-  mode: single
-- id: '1658850437024'
-  alias: Turn on In Office
-  description: ''
-  trigger:
-  - platform: calendar
-    event: start
-    offset: -0:0:0
-    entity_id: calendar.fred_office
-  condition:
-  - condition: state
-    entity_id: input_boolean.fred_in_office
-    state: 'off'
-  action:
-  - service: input_boolean.turn_on
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.fred_in_office
-  mode: single
-- id: '1658850573720'
-  alias: Turn off In Office
-  description: ''
-  trigger:
-  - platform: calendar
-    event: end
-    offset: 0:0:0
-    entity_id: calendar.fred_office
-  condition:
-  - condition: state
-    entity_id: input_boolean.fred_in_office
-    state: 'on'
-  action:
-  - service: input_boolean.turn_off
-    data: {}
-    target:
-      entity_id: input_boolean.fred_in_office
-  mode: single
-- id: '1658850648952'
-  alias: Turn on ROTA
-  description: ''
-  trigger:
-  - platform: calendar
-    event: start
-    offset: -0:0:0
-    entity_id: calendar.fred_rota
-  condition:
-  - condition: state
-    entity_id: input_boolean.fred_on_rota
-    state: 'off'
-  action:
-  - service: input_boolean.turn_on
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.fred_on_rota
-  mode: single
-- id: '1658850716656'
-  alias: Turn off ROTA
-  description: ''
-  trigger:
-  - platform: calendar
-    event: end
-    offset: -0:0:0
-    entity_id: calendar.fred_rota
-  condition:
-  - condition: state
-    entity_id: calendar.fred_rota
-    state: 'on'
-  action:
-  - service: input_boolean.turn_off
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.fred_on_rota
-  mode: single
 - id: '1658858691976'
   alias: Bathroom Motion
   description: ''
@@ -427,7 +317,7 @@
       sequence:
       - service: input_select.set_options
         data:
-          options: both
+          options: Trash+Recycle
         target:
           entity_id: input_select.trash_day
     - conditions:
@@ -439,13 +329,13 @@
       sequence:
       - service: input_select.set_options
         data:
-          options: trash
+          options: Trash Day
         target:
           entity_id: input_select.trash_day
     default:
     - service: input_select.set_options
       data:
-        options: none
+        options: No Trash
       target:
         entity_id: input_select.trash_day
   mode: single
@@ -454,7 +344,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 00:00:00
+    at: 00:01:00
   condition: []
   action:
   - choose:
@@ -467,7 +357,7 @@
       sequence:
       - service: input_select.set_options
         data:
-          options: sunday
+          options: Sunday
         target:
           entity_id: input_select.mail_status
     - conditions:
@@ -477,13 +367,13 @@
       sequence:
       - service: input_select.set_options
         data:
-          options: holiday
+          options: Holiday
         target:
           entity_id: input_select.mail_status
     default:
     - service: input_select.set_options
       data:
-        options: none
+        options: No Mail
       target:
         entity_id: input_select.mail_status
   - service: input_boolean.turn_off
@@ -503,26 +393,26 @@
   condition:
   - condition: state
     entity_id: input_select.mail_status
-    state: none
+    state: No Mail
   action:
   - service: input_select.set_options
     data:
-      options: ygm
+      options: Mail
     target:
       entity_id: input_select.mail_status
   - service: notify.mobile_app_heisenberg
     data:
-      message: Mail arriving today
-      title: USPS
+      message: You've Got Mail
+      title: YGM
       data:
-        entity_id: camera.mail_usps_camera
+        image: '{{ states(''sensor.mail_image_url'') }}'
   mode: single
 - id: '1659300783630'
   alias: Set Fred Arriving
   description: ''
   trigger:
   - platform: zone
-    entity_id: device_tracker.heisenberg_2
+    entity_id: person.fvanwest
     zone: zone.home
     event: enter
   condition: []
@@ -544,7 +434,7 @@
     - conditions:
       - condition: state
         entity_id: input_select.mail_status
-        state: sunday
+        state: Sunday
       sequence:
       - service: notify.alexa_media
         data:
@@ -561,7 +451,7 @@
     - conditions:
       - condition: state
         entity_id: input_select.mail_status
-        state: holiday
+        state: Holiday
       sequence:
       - service: notify.alexa_media
         data:
@@ -578,7 +468,7 @@
     - conditions:
       - condition: state
         entity_id: input_select.mail_status
-        state: ygm
+        state: Mail
       sequence:
       - service: notify.alexa_media
         data:
@@ -613,6 +503,9 @@
         title: USPS
         data:
           entity_id: camera.mail_usps_camera
+  - service: script.say_house_cup
+    data:
+      device: media_player.vw_familyroom
   mode: single
 - id: '1659305364683'
   alias: popup test
@@ -631,37 +524,6 @@
         color: blue
         image:
           path: /config/www/images/leia.png
-  mode: single
-- id: '1659452421171'
-  alias: Daily Standup
-  description: ''
-  trigger:
-  - platform: time
-    at: '10:30:00'
-    id: standup_on
-  - platform: time
-    at: '11:05:00'
-    id: standup_off
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: standup_on
-      sequence:
-      - service: input_boolean.turn_on
-        data: {}
-        target:
-          entity_id: input_boolean.fred_in_a_meeting
-    - conditions:
-      - condition: trigger
-        id: standup_off
-      sequence:
-      - service: input_boolean.turn_off
-        data: {}
-        target:
-          entity_id: input_boolean.fred_in_a_meeting
-    default: []
   mode: single
 - id: '1660835408789'
   alias: Smart Door
@@ -737,9 +599,9 @@
           sequence:
           - service: notify.alexa_media
             data:
-              message: "{{ [\"Precious pupper!\",\n    \"Wonderful woofer!\",\n    \"Somebody
-                deserves a treat!\",\n    \"Sit ooboo Sit! Good Dog!\",\n    \"Grrrr.
-                Bark. Woof. Good dog!\"] | random }}\n"
+              message: "{{ [\"Grrrr. Bark. Woof. Good dog!\",\n    \"Wonderful woofer!\",\n
+                \   \"Somebody deserves a treat!\",\n    \"Sit ooboo Sit! Good Dog!\",\n
+                \   \"Whos a good dog?\",\n    \"Precious pupper!\"] | random }}\n"
               target: '{{ states("input_text.announce_media") }}'
               data:
                 type: tts
@@ -778,19 +640,936 @@
           message: "The {{ trigger.to_state.attributes.friendly_name | replace(\"
             contact\",\"\") }} {{ [\n  ' is standing open.',\n  ' is open.',\n  '
             does not close on its own.',\n  ' was left standing open.'\n ] | random
-            }}\n {{ [\n  'Can a human be so kind and close it?',\n  'The air quality
-            in this house has actually improved.',\n  'Closing the door would improve
-            the internal climate of the house.',\n  'Hey. The door was just opened
-            and this is crazy. But now you know. So close it maybe.',\n  'The frog
-            found out the door is opened and wants back in.',\n  'If at first you
-            do not succeed in closing the door, please try again. Like, Right now
-            seems like a good time to try again.',\n  'And the automatic door closer
-            appears to be broken. So, you know what to do. Time to get physical.',\n
-            \ 'I would close it for you. But I lack legs. And Arms.'\n  'Remember
-            when you said you hate bugs. Well now is your chance to help.'\n ] | random
-            }}\n"
+            }}\n {{ [\n  'Can a human be so kind and close it?',\n  'Were you born
+            in a barn?',\n  'Buzz buzz, great new hive. Lets keep it outside, shall
+            we?',\n  'The air quality in this house has actually improved.',\n  'Closing
+            the door would improve the internal climate of the house.',\n  'Hey. The
+            door was just opened and this is crazy. But now you know. So close it
+            maybe.',\n  'The frog found out the door is opened and wants back in.',\n
+            \ 'If at first you do not succeed in closing the door, please try again.
+            Like, Right now seems like a good time to try again.',\n  'And the automatic
+            door closer appears to be broken. So, you know what to do. Time to get
+            physical.',\n  'I would close it for you. But I lack legs. And Arms.',\n
+            \ 'Remember when you said you hate bugs. Well now is your chance to help.'\n
+            ] | random }}\n"
           target: '{{ states("input_text.announce_media") }}'
           data:
             type: tts
     default: []
+  mode: single
+- id: '1661256125909'
+  alias: Carriage Lights on Improved
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: '-10'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: time
+        weekday:
+        - fri
+        - sat
+        before: '23:59:59'
+        after: 00:00:00
+      sequence:
+      - service: scene.turn_on
+        data: {}
+        target:
+          entity_id:
+          - scene.carriage_weekend
+    - conditions:
+      - condition: template
+        value_template: '{{ as_timestamp(state_attr("calendar.holidays_in_united_states",
+          "start_time"))|float - as_timestamp(now())|float < 86400.0 }}'
+      sequence:
+      - service: scene.turn_on
+        data: {}
+        target:
+          entity_id:
+          - scene.carriage_holiday
+    default:
+    - service: scene.turn_on
+      data: {}
+      target:
+        entity_id: scene.carriage_night
+  mode: single
+- id: '1661360108986'
+  alias: Turn off Heating Pad
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.outside_lights_current_power
+        above: '10.0'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Turning off heating pad
+          data:
+            type: tts
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.outside_lights
+      - service: notify.all_ios_devices
+        data:
+          message: Circut above minimum power. Turn back on manually tomorrow.
+          title: Heating Pad Switched Off
+          data:
+            type: tts
+    default:
+    - service: notify.alexa_media_vw_familyroom
+      data:
+        message: Heating pad is already off.
+        data:
+          type: tts
+  mode: single
+- id: '1661360467417'
+  alias: Turn on heating pad
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: switch.outside_lights
+        state: 'off'
+      sequence:
+      - service: notify.alexa_media_vw_familyroom
+        data:
+          message: Turning heating pad switch on.
+          data:
+            type: tts
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.outside_lights
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 30
+          milliseconds: 0
+      - choose:
+        - conditions:
+          - condition: numeric_state
+            entity_id: sensor.outside_lights_current_power
+            above: '0.1'
+          sequence:
+          - service: notify.alexa_media_vw_familyroom
+            data:
+              message: Heating pad is now on.
+              data:
+                type: tts
+        default:
+        - service: notify.alexa_media_vw_familyroom
+          data:
+            message: Try turning on the heating pad switch.
+            data:
+              type: tts
+    default: []
+  mode: single
+- id: '1661433270269'
+  alias: Perimeter - Doorbell Motion - TV notification
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.celtic_ash_motion_2
+    to: 'on'
+    from: 'off'
+  condition:
+  - condition: state
+    entity_id: media_player.samsung_tv
+    state: 'on'
+  - condition: state
+    entity_id: media_player.vw_dlna_3
+    state: idle
+  action:
+  - service: camera.snapshot
+    target:
+      entity_id: camera.celtic_ash
+    data:
+      filename: /config/www/tmp/Visitor_alert.jpg
+  - service: notify.android_tv_fire_tv
+    data:
+      message: Motion detected
+      title: Ring Doorbell
+      data:
+        duration: 10
+        position: bottom-right
+        transparency: 50%
+        color: grey
+        interrupt: 1
+        image:
+          path: /config/www/tmp/Visitor_alert.jpg
+  - service: delete.file
+    data:
+      file: /config/www/tmp/Visitor_alert.jpg
+  mode: parallel
+  max: 10
+- id: '1662401699019'
+  alias: Fred Working
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30:00
+  condition:
+  - condition: state
+    entity_id: calendar.jpmc_holiday
+    state: 'off'
+  - condition: state
+    entity_id: calendar.fred_vacation
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      color_name: darkgreen
+    target:
+      entity_id: light.globe_fairy_lights
+  - service: notify.alexa_media
+    data:
+      message: <audio src="https://mc-usa.duckdns.org/local/alexa/slytherin.mp3"/>
+      target: media_player.vw_guestroom
+      data:
+        type: tts
+  mode: single
+- id: '1662401848942'
+  alias: Fred Done Working
+  description: ''
+  trigger:
+  - platform: time
+    at: '17:00:00'
+  condition:
+  - condition: state
+    entity_id: calendar.jpmc_holiday
+    state: 'off'
+  - condition: state
+    entity_id: calendar.fred_vacation
+    state: 'off'
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.globe_fairy_lights
+  - service: notify.alexa_media
+    data:
+      message: <audio src="https://mc-usa.duckdns.org/local/alexa/quitting-time.mp3"/>
+      target: media_player.vw_guestroom
+      data:
+        type: tts
+  mode: single
+- id: '1662467680375'
+  alias: IKEA Remote Virtual Switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - switch.ikea_remote_virtual_switch_dim
+    to: 'on'
+    id: trigger_remote_dim
+  - platform: state
+    entity_id:
+    - switch.ikea_remote_virtual_switch_on
+    id: trigger_remote_on
+    to: 'on'
+  - platform: state
+    entity_id:
+    - switch.ikea_remote_virtual_switch_off
+    to: 'on'
+    id: trigger_remote_off
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: trigger_remote_on
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.master_closet_on
+        metadata: {}
+    - conditions:
+      - condition: trigger
+        id: trigger_remote_dim
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.master_closet_minimum
+        metadata: {}
+    - conditions:
+      - condition: trigger
+        id: trigger_remote_off
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.master_closet_off
+        metadata: {}
+    default: []
+  mode: single
+- id: '1663002689702'
+  alias: Fred Working Improved
+  description: Uses schedule
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.work_schedule
+    from: 'off'
+    to: 'on'
+    id: fred_work_start
+  - platform: state
+    entity_id:
+    - schedule.work_schedule
+    from: 'on'
+    to: 'off'
+    id: fred_work_stop
+  condition:
+  - condition: state
+    entity_id: calendar.jpmc_holiday
+    state: 'off'
+  - condition: state
+    entity_id: calendar.fred_vacation
+    state: 'off'
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fred_work_start
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/slytherin.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: darkgreen
+        target:
+          entity_id: light.globe_fairy_lights
+    - conditions:
+      - condition: trigger
+        id: fred_work_stop
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/quitting-time.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.globe_fairy_lights
+  mode: single
+- id: '1663092434180'
+  alias: Laptop Perimeter Detection
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.celtic_ash_motion_2
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: camera.snapshot
+    target:
+      entity_id: camera.celtic_ash
+    data:
+      filename: /config/www/tmp/Visitor_alert.jpg
+  - service: notify.hass_agent_l_pf2k9yz5
+    data:
+      message: Motion detected
+      title: Ring Doorbell
+      data:
+        duration: 10
+        image: /config/www/tmp/Visitor_alert.jpg
+  - service: delete.file
+    data:
+      file: /config/www/tmp/Visitor_alert.jpg
+  mode: parallel
+  max: 10
+- id: '1664366553928'
+  alias: Fred working improved improved
+  description: Uses schedule
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.work_schedule
+    from: 'off'
+    to: 'on'
+    id: fred_work_start
+  - platform: state
+    entity_id:
+    - schedule.work_schedule
+    from: 'on'
+    to: 'off'
+    id: fred_work_stop
+  condition:
+  - condition: state
+    entity_id: calendar.jpmc_holiday
+    state: 'off'
+  - condition: state
+    entity_id: calendar.fred_vacation
+    state: 'off'
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fred_work_start
+      sequence:
+      - service: automation.trigger
+        data: {}
+        target:
+          entity_id:
+          - automation.sorting_hat_improved
+    - conditions:
+      - condition: trigger
+        id: fred_work_stop
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/quitting-time.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.globe_fairy_lights
+  mode: single
+- id: '1664368943997'
+  alias: Sorting Hat
+  description: Today's sorting hat result
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: slytherin
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/slytherin.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: darkgreen
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Fred!
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: hufflepuff
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/hufflepuff.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: yellow
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Ted and Laura!
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: gryffindor
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/gryffindor.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: darkred
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Nico!
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: ravenclaw
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/ravenclaw.mp3"/>
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: aqua
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Rachel!
+          target: media_player.vw_guestroom
+          data:
+            type: tts
+  - service: notify.alexa_media_vw_guestroom
+    data:
+      message: Todays house cup was won by {{ states("input_select.hogwarts_house")
+        }}. I believe congratulations are in order.
+      data:
+        type: tts
+  mode: single
+- id: '1664370726931'
+  alias: House Cup
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:01:00
+  condition: []
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{ range(0,4) | random | int }}'
+    target:
+      entity_id: input_number.house_cup
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 1
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: slytherin
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 2
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: gryffindor
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        value_template: ''
+        below: 3
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: ravenclaw
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 4
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: ravenclaw
+        target:
+          entity_id: input_select.hogwarts_house
+  mode: single
+- id: '1664539648769'
+  alias: Sorting Hat Redux
+  description: Today's sorting hat result
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: slytherin
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/slytherin.mp3"/>
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: darkgreen
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Fred!
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: hufflepuff
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/hufflepuff.mp3"/>
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: yellow
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Ted and Laura!
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: gryffindor
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/gryffindor.mp3"/>
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: darkred
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Nico!
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: ravenclaw
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/ravenclaw.mp3"/>
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+      - service: light.turn_on
+        data:
+          color_name: aqua
+        target:
+          entity_id: light.globe_fairy_lights
+      - service: notify.alexa_media
+        data:
+          message: Great news Rachel!
+          target: media_player.vw_familyroom
+          data:
+            type: tts
+  - service: script.say_house_cup
+    data:
+      device: media_player.vw_familyroom
+  mode: single
+- id: '1665264420447'
+  alias: Set House Cup Decor
+  description: Set today's house cup decor
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: slytherin
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: darkgreen
+        target:
+          entity_id: light.globe_fairy_lights
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: hufflepuff
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: yellow
+        target:
+          entity_id: light.globe_fairy_lights
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: gryffindor
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: darkred
+        target:
+          entity_id: light.globe_fairy_lights
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: ravenclaw
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: aqua
+        target:
+          entity_id: light.globe_fairy_lights
+  mode: single
+- id: '1665264657846'
+  alias: Sorting Hat Improved
+  description: Today's sorting hat result
+  trigger: []
+  condition: []
+  action:
+  - service: automation.trigger
+    data: {}
+    target:
+      entity_id: automation.set_house_cup_decor
+  - service: script.say_house_cup
+    data:
+      device: media_player.vw_guestroom
+  mode: single
+- id: '1666372229200'
+  alias: Hourly Points
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: '30'
+  condition: []
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{ range(0,4) | random | int }}'
+    target:
+      entity_id: input_number.hourly_house
+  - service: input_number.set_value
+    data:
+      value: '{{ (range(0,10) | random | int ) + 1.0 }}'
+    target:
+      entity_id: input_number.hourly_points
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.hourly_house
+        below: 1
+      sequence:
+      - repeat:
+          count: '{{ states("input_number.hourly_points") | int }}
+
+            '
+          sequence:
+          - service: counter.increment
+            data: {}
+            target:
+              entity_id: counter.slytherin_points
+      - service: input_text.set_value
+        data:
+          value: slytherin
+        target:
+          entity_id: input_text.hourly_house_winner
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.hourly_house
+        below: 2
+      sequence:
+      - repeat:
+          count: '{{ states("input_number.hourly_points") | int }}
+
+            '
+          sequence:
+          - service: counter.increment
+            data: {}
+            target:
+              entity_id: counter.gryffindor_points
+      - service: input_text.set_value
+        data:
+          value: gryffindor
+        target:
+          entity_id: input_text.hourly_house_winner
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.hourly_house
+        below: 3
+      sequence:
+      - repeat:
+          count: '{{ states("input_number.hourly_points") | int }}
+
+            '
+          sequence:
+          - service: counter.increment
+            data: {}
+            target:
+              entity_id: counter.hufflepuff_points
+      - service: input_text.set_value
+        data:
+          value: hufflepuff
+        target:
+          entity_id: input_text.hourly_house_winner
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.hourly_house
+        below: 4
+      sequence:
+      - repeat:
+          count: '{{ states("input_number.hourly_points") | int }}
+
+            '
+          sequence:
+          - service: counter.increment
+            data: {}
+            target:
+              entity_id: counter.ravenclaw_points
+      - service: input_text.set_value
+        data:
+          value: ravenclaw
+        target:
+          entity_id: input_text.hourly_house_winner
+  mode: single
+- id: '1666379041827'
+  alias: House Cup Improved
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:01:00
+  condition: []
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{% set slytherin_pts = states("counter.slytherin_points") | int %} {%
+        set gryffindor_pts = states("counter.gryffindor_points") | int %} {% set hufflepuff_pts
+        = states("counter.hufflepuff_points") | int %} {% set ravenclaw_pts = states("counter.ravenclaw_points")
+        | int %} {% set house_standings = [slytherin_pts,gryffindor_pts,hufflepuff_pts,ravenclaw_pts]
+        %} {% set house_winner = max(house_standings) %} {% set x = house_standings.index(house_winner)
+        %} {{ x }}
+
+        '
+    target:
+      entity_id: input_number.house_cup
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 1
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: slytherin
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 2
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: gryffindor
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 3
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: hufflepuff
+        target:
+          entity_id: input_select.hogwarts_house
+    - conditions:
+      - condition: numeric_state
+        entity_id: input_number.house_cup
+        below: 4
+      sequence:
+      - service: input_select.select_option
+        data:
+          option: ravenclaw
+        target:
+          entity_id: input_select.hogwarts_house
+  - service: counter.reset
+    data: {}
+    target:
+      entity_id:
+      - counter.gryffindor_points
+      - counter.hufflepuff_points
+      - counter.ravenclaw_points
+      - counter.slytherin_points
+  mode: single
+- id: '1667007819622'
+  alias: Toggle watching trek
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - media_player.fire_tv_192_168_1_57
+    to: com.cbs.ott
+    attribute: app_id
+    id: Turn_on_trek
+  - platform: state
+    entity_id:
+    - media_player.fire_tv_192_168_1_57
+    attribute: app_id
+    id: Turn_off_trek
+    from: com.cbs.ott
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: Turn_on_trek
+      sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id: input_boolean.watching_trek
+      - service: rest_command.trek_mode_on
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: Turn_off_trek
+      sequence:
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.watching_trek
+      - service: rest_command.trek_mode_off
+        data: {}
   mode: single

@@ -1,12 +1,13 @@
-
 # Loads default set of integrations. Do not remove.
 default_config:
 
 alexa:
   smart_home:
 
+delete:
+
 http:
-  ssl_certificate: /ssl/fullchain.pem 
+  ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
   use_x_forwarded_for: true
   trusted_proxies:
@@ -16,13 +17,13 @@ http:
 # Text to speech
 tts:
   - platform: google_translate
-  
+
 input_text:
   alexa_actionable_notification:
     name: Alexa Actionable Notification Holder
     max: 255
     initial: '{"text": "This is a test of the alexa actions custom skill. Did it work?", "event": "actionable.skill.test"}'
-    
+
 # Note: The following two scripts are unsecured. While it's unlikely that forwarding or archiving email is going to be malicious,
 # if that does become an issue, we can add credentials here to lock down permissions.
 rest_command:
@@ -30,8 +31,34 @@ rest_command:
     url: !secret rest_forward_mail
   delete_mail:
     url: !secret rest_delete_mail
-    
+  trek_mode_on:
+    url: !secret trek_mode_on
+  trek_mode_off:
+    url: !secret trek_mode_off
+
+media_player:
+  - name: "hass agent test mediaplayer"
+    platform: hass_agent_mediaplayer
+    host: 192.168.1.44
+  - name: "hass agent sherlock mediaplayer"
+    platform: hass_agent_mediaplayer
+    host: 192.168.1.29
+  - name: "hass agent L-PF2K9YZ5 mediaplayer"
+    platform: hass_agent_mediaplayer
+    host: 192.168.1.53
+
+logger:
+  default: warning
+  logs:
+    custom_components.hass_agent_mediaplayer: debug
+
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
-sensor: !include sensor.yaml
+template: !include template.yaml
+notify: !include notify.yaml
+mqtt: !include mqtt.yaml
+
+frontend:
+  extra_module_url:
+    - /local/zoom-enable.js

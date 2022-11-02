@@ -1,0 +1,15 @@
+- platform: group
+  name: all_ios_devices
+  services:
+    - service: mobile_app_heisenberg
+    - service: mobile_app_lauras_iphone
+    - service: mobile_app_ipad
+- platform: hass_agent_notifier
+  name: Hass Agent Drogon
+  resource: http://192.168.1.44:5115/notify
+- platform: hass_agent_notifier
+  name: Hass Agent Sherlock
+  resource: http://192.168.1.29:5115/notify
+- platform: hass_agent_notifier
+  name: Hass Agent L-PF2K9YZ5
+  resource: http://192.168.1.53:5115/notify

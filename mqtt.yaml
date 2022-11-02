@@ -1,0 +1,14 @@
+switch:
+  - unique_id: christmas_switch
+    name: "Christmas Switch"
+    state_topic: "home/guestroom/christmas"
+    command_topic: "home/guestroom/christmas/set"
+    availability:
+      - topic: "home/guestroom/christmas/available"
+    payload_on: "ON"
+    payload_off: "OFF"
+    state_on: "ON"
+    state_off: "OFF"
+    optimistic: false
+    qos: 0
+    retain: true

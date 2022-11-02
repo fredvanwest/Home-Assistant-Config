@@ -246,3 +246,179 @@ script_resume_door_alert:
       data:
         type: tts
   mode: single
+script_heating_pad_on:
+  alias: Script Turn On Heating Pad
+  sequence:
+  - service: automation.trigger
+    data: {}
+    target:
+      entity_id: automation.turn_on_heating_pad
+  mode: single
+pop_image:
+  alias: Notification Test
+  variables:
+    image: "{%- set image =\n  \"https://192.168.1.45:8123\" + state_attr(\"camera.mail_usps_camera\",\"entity_picture\")\n%}
+      {{ image }}\n"
+  sequence:
+  - service: notify.hass_agent_l_pf2k9yz5
+    data:
+      title: Another Laptop Camera Test
+      message: Test message
+      data:
+        duration: 10
+        image: '{{ image }}'
+  mode: single
+  icon: mdi:bell
+notification_sound:
+  alias: Notification Sound
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_type: music
+      media_content_id: https://192.168.1.45:8123/local/alexa/TTS-want-you-to-want-me.mp3
+    target:
+      entity_id:
+      - media_player.hass_agent_l_pf2k9yz5_mediaplayer
+  variables:
+    image: "{%- set image =\n  \"https://192.168.1.45:8123\" + state_attr(\"camera.mail_usps_camera\",\"entity_picture\")\n%}
+      {{ image }}\n"
+  mode: single
+  icon: mdi:speaker
+say_house_cup:
+  alias: Say House Cup
+  fields:
+    device:
+      description: Alexa Target
+      example: media_player.vw_guestroom
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: slytherin
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/slytherin.mp3"/>
+          target: '{{ device }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: Great news Fred!
+          target: '{{ device }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: hufflepuff
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/hufflepuff.mp3"/>
+          target: '{{ device }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: Great news Laura!
+          target: '{{ device }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: gryffindor
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/gryffindor.mp3"/>
+          target: '{{ device }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: Great news Nico!
+          target: '{{ device }}'
+          data:
+            type: tts
+    - conditions:
+      - condition: state
+        entity_id: input_select.hogwarts_house
+        state: ravenclaw
+      sequence:
+      - service: notify.alexa_media
+        data:
+          message: <audio src="https://mc-usa.duckdns.org/local/alexa/ravenclaw.mp3"/>
+          target: '{{ device }}'
+          data:
+            type: tts
+      - service: notify.alexa_media
+        data:
+          message: Great news Duchess!
+          target: '{{ device }}'
+          data:
+            type: tts
+  - service: notify.alexa_media
+    data:
+      message: Todays house cup was won by {{ states("input_select.hogwarts_house")
+        }}. I believe congratulations are in order.
+      target: '{{ device }}'
+      data:
+        type: tts
+  mode: single
+script_house_cup:
+  alias: Script House Cup
+  fields:
+    device:
+      description: Device to play results
+      example: media_player.vw_familyroom
+  sequence:
+  - service: script.say_house_cup
+    data:
+      device: '{{ states("sensor.last_alexa") }}'
+  mode: single
+say_house_points_standings:
+  alias: Say House Points Standings
+  fields:
+    device:
+      description: Alexa Target
+      example: media_player.vw_guestroom
+  sequence:
+  - service: notify.alexa_media
+    data:
+      message: "\"As of this moment,\" {% set house_standings = [{\"name\":\"slytherin\",
+        \"pts\": states(\"counter.slytherin_points\") | int},{\"name\":\"gryffindor\",
+        \"pts\":states(\"counter.gryffindor_points\")|int},{\"name\":\"hufflepuff\",\"pts\":states(\"counter.hufflepuff_points\")|int},{\"name\":\"ravenclaw\",
+        \"pts\":states(\"counter.ravenclaw_points\")|int}] %} {% for house in house_standings|sort(attribute='pts',
+        reverse=true) %} \n  {% if loop.index == 4 %} and {% endif %}\n  {% if house.pts
+        == 1 %} 1 point has{% else %} {{house.pts}} points have{% endif %} been awarded
+        to {{ house.name }}.\n{% endfor %}\n"
+      target: '{{ device }}'
+      data:
+        type: tts
+  mode: single
+script_say_house_points_standing:
+  alias: Script Say House Points Standing
+  sequence:
+  - service: script.say_house_points_standings
+    data:
+      device: '{{ states("sensor.last_alexa") }}'
+  mode: single
+show_house_points:
+  alias: show house points
+  sequence:
+  - service: browser_mod.sequence
+    data:
+      sequence:
+      - service: browser_mod.navigate
+        data:
+          path: /lovelace/house-cup-standings
+      - service: browser_mod.delay
+        data:
+          time: 5000
+      - service: browser_mod.navigate
+        data:
+          path: /lovelace/dashboard
+  mode: single
